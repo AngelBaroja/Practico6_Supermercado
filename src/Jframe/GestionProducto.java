@@ -4,6 +4,9 @@
  */
 package Jframe;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import practico6.Producto;
 import practico6.Supermercado_DeTodo;
@@ -20,7 +23,8 @@ public class GestionProducto extends javax.swing.JInternalFrame {
     public GestionProducto() {
         initComponents();
         armarTabla();
-        cargarCombo();
+        cargarCombo(); 
+        cargarFilas();
     }
 
     /**
@@ -60,6 +64,12 @@ public class GestionProducto extends javax.swing.JInternalFrame {
 
         jLabel9.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel9.setText("Filtrar por Categoria:");
+
+        jComboFiltrarCategoria.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboFiltrarCategoriaItemStateChanged(evt);
+            }
+        });
 
         jTableProductos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -139,14 +149,40 @@ public class GestionProducto extends javax.swing.JInternalFrame {
         });
 
         jButtonCerrar.setText("Cerrar");
+        jButtonCerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCerrarActionPerformed(evt);
+            }
+        });
 
         jButtonNuevo.setText("Nuevo");
+        jButtonNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonNuevoActionPerformed(evt);
+            }
+        });
 
         jButtonGuardar.setText("Guardar");
+        jButtonGuardar.setEnabled(false);
+        jButtonGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonGuardarActionPerformed(evt);
+            }
+        });
 
         jButtonEliminar.setText("Eliminar");
+        jButtonEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEliminarActionPerformed(evt);
+            }
+        });
 
         jButtonActualizar.setText("Actualizar");
+        jButtonActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonActualizarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -230,7 +266,107 @@ public class GestionProducto extends javax.swing.JInternalFrame {
         jComboCategoria.setSelectedItem(producto.getRubro());
         jSpinnerStock.setValue(producto.getStock());
     }//GEN-LAST:event_jButtonBusquedaActionPerformed
+    private int numero=0;
+    private void jComboFiltrarCategoriaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboFiltrarCategoriaItemStateChanged
+        
+        if (numero > 1) {
+            if (jComboFiltrarCategoria.getSelectedItem().toString() == "-") {
+                borrarFilasTablas();
+                cargarFilas();
+            } else {
+                borrarFilasTablas();
+                String rubro=jComboFiltrarCategoria.getSelectedItem().toString();
+                for (Producto listaProducto : Supermercado_DeTodo.listaProductos) {
+                    if (listaProducto.getRubro()==rubro) {
+                        modelo.addRow(new Object []{
+                             listaProducto.getCodigo(),
+                             listaProducto.getDescripcion(),
+                             listaProducto.getPrecio(),
+                             listaProducto.getRubro(),
+                             listaProducto.getStock()  
+                        });
+                    }
+                }
+            }
+        }
+        numero++;
+    }//GEN-LAST:event_jComboFiltrarCategoriaItemStateChanged
 
+    private void jButtonNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuevoActionPerformed
+        if(comprobarCasillas()){
+            jButtonGuardar.setEnabled(true);
+            JOptionPane.showMessageDialog(this, "Perfecto ahora puede guarda el Nuevo Producto");
+        }
+    }//GEN-LAST:event_jButtonNuevoActionPerformed
+
+    private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
+        if (comprobarCasillas()) {
+       int codigo=Integer.parseInt(jTextFieldCodigo.getText().toString());
+       String descripcion= jTextFieldDescripcion.getText().toString();
+       double precio=Double.parseDouble(jTextFieldPrecio.getText().toString());
+       String rubro=jComboCategoria.getSelectedItem().toString();
+       int stock=(Integer) jSpinnerStock.getValue();
+       Producto producto=new Producto(codigo, descripcion, precio, rubro, stock);
+       Supermercado_DeTodo.listaProductos.add(producto);
+       JOptionPane.showMessageDialog(this, "Producto Guardado");
+       jButtonGuardar.setEnabled(false);
+       limpiarCasillas();
+       borrarFilasTablas();
+       cargarFilas(); 
+       }
+    
+    }//GEN-LAST:event_jButtonGuardarActionPerformed
+
+    private void jButtonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActualizarActionPerformed
+        if (comprobarCasillas()) {            
+            int codigo = Integer.parseInt(jTextFieldCodigo.getText().toString());
+            String descripcion = jTextFieldDescripcion.getText().toString();
+            double precio = Double.parseDouble(jTextFieldPrecio.getText().toString());
+            String rubro = jComboCategoria.getSelectedItem().toString();
+            int stock = (Integer) jSpinnerStock.getValue();
+            Producto producto = new Producto(codigo, descripcion, precio, rubro, stock);
+            Supermercado_DeTodo mercado = new Supermercado_DeTodo();
+            boolean comprobador=false;
+            for (Producto listaProducto : Supermercado_DeTodo.listaProductos) {
+                if (listaProducto.getCodigo() == producto.getCodigo()) {
+                    mercado.actualizar(producto);
+                    comprobador=true;
+                    break;
+                }
+            }
+            if (comprobador) {
+                limpiarCasillas();
+                borrarFilasTablas();
+                cargarFilas();
+                JOptionPane.showMessageDialog(this, "Producto encontrado y Actualizado");
+            }else{
+                JOptionPane.showMessageDialog(this, "Codigo de Producto no encontrado");
+            }
+        }
+    }//GEN-LAST:event_jButtonActualizarActionPerformed
+
+    private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
+         if (comprobarCasillas()) {            
+            int codigo = Integer.parseInt(jTextFieldCodigo.getText().toString());
+            String descripcion = jTextFieldDescripcion.getText().toString();
+            double precio = Double.parseDouble(jTextFieldPrecio.getText().toString());
+            String rubro = jComboCategoria.getSelectedItem().toString();
+            int stock = (Integer) jSpinnerStock.getValue();
+            Producto producto = new Producto(codigo, descripcion, precio, rubro, stock);
+            Supermercado_DeTodo mercado = new Supermercado_DeTodo();          
+            mercado.eliminarProducto(producto);                    
+            JOptionPane.showMessageDialog(this, "Producto Eliminado");
+            limpiarCasillas();
+            borrarFilasTablas();
+            cargarFilas();
+        }
+    }//GEN-LAST:event_jButtonEliminarActionPerformed
+
+    private void jButtonCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCerrarActionPerformed
+      this.dispose();
+      
+    }//GEN-LAST:event_jButtonCerrarActionPerformed
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonActualizar;
@@ -257,9 +393,11 @@ public class GestionProducto extends javax.swing.JInternalFrame {
     private javax.swing.JTextField jTextFieldPrecio;
     // End of variables declaration//GEN-END:variables
     public void cargarCombo(){
+        jComboCategoria.addItem("-");
         jComboCategoria.addItem("Comestible");
         jComboCategoria.addItem("Limpieza");
         jComboCategoria.addItem("Perfumeria");
+        jComboFiltrarCategoria.addItem("-");
         jComboFiltrarCategoria.addItem("Comestible");
         jComboFiltrarCategoria.addItem("Limpieza");
         jComboFiltrarCategoria.addItem("Perfumeria");
@@ -284,8 +422,7 @@ public class GestionProducto extends javax.swing.JInternalFrame {
                 listaProducto.getDescripcion(),
                 listaProducto.getPrecio(),
                 listaProducto.getRubro(),
-                listaProducto.getStock(),
-                
+                listaProducto.getStock()                
             });
         }    
     }
@@ -294,5 +431,50 @@ public class GestionProducto extends javax.swing.JInternalFrame {
         for (int i = fila ; i >= 0 ; i--) {
             modelo.removeRow(i);
         }
+    }
+    public void limpiarCasillas(){
+        jTextFieldCodigo.setText("");
+        jTextFieldDescripcion.setText("");
+        jTextFieldPrecio.setText("");
+        jComboCategoria.setSelectedItem("-");
+        jSpinnerStock.setValue(0);
+    }
+    public static boolean soloNumeros(String cadena) {
+        // Expresión regular para que solo permita números (del 0 al 9)
+        Pattern pattern = Pattern.compile("[^0-9.]"); // Cualquier carácter que no sea un dígito
+        Matcher matcher = pattern.matcher(cadena);
+
+        // Retorna true si NO encuentra caracteres que no sean dígitos, es decir, solo números
+        return !matcher.find();
+    }
+    public boolean comprobarCasillas(){
+        boolean comprobar=true;
+        if (jTextFieldCodigo.getText().toString().equals("")) {
+            JOptionPane.showMessageDialog(this, "Llenar campo Codigo"); 
+            comprobar=false;
+        }else if (!soloNumeros(jTextFieldCodigo.getText().toString())) {
+                JOptionPane.showMessageDialog(this, "Llenar campo Codigo, con numeros unicamente");
+                comprobar=false;
+        }
+        if(jTextFieldDescripcion.getText().toString().equals("")){
+            JOptionPane.showMessageDialog(this, "Llenar campo Descripcion");
+            comprobar=false;
+        }
+        if(jTextFieldPrecio.getText().toString().equals("")){
+            JOptionPane.showMessageDialog(this, "Llenar campo Precio"); 
+            comprobar=false;
+        }else if(!soloNumeros(jTextFieldPrecio.getText().toString())){
+            JOptionPane.showMessageDialog(this, "Llenar campo Precio, con numeros unicamente"); 
+            comprobar=false;
+        }
+        if(jComboCategoria.getSelectedItem().toString().equals("-")){
+            JOptionPane.showMessageDialog(this, "Elegir un campo para el Rubro");
+            comprobar=false;
+        }        
+        if((Integer) jSpinnerStock.getValue()<= 0){
+            JOptionPane.showMessageDialog(this, "La cantidad de Stock no puede ser 0 o menor");
+            comprobar=false;
+        }
+        return comprobar;
     }
 }

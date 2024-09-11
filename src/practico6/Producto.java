@@ -8,7 +8,7 @@ package practico6;
  *
  * @author El Angel
  */
-public class Producto {
+public class Producto implements Comparable<Producto> {
     private int codigo;
     private String descripcion;
     private double precio;
@@ -27,27 +27,9 @@ public class Producto {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 83 * hash + this.codigo;
-        return hash;
+    public int compareTo(Producto otroProducto) {      
+        return Integer.compare(this.codigo, otroProducto.codigo);  
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Producto other = (Producto) obj;
-        return this.codigo == other.codigo;
-    }
-
     
     
     public int getCodigo() {

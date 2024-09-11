@@ -20,7 +20,7 @@ public class Supermercado_DeTodo {
         listaProductos.add(producto);
     }
     
-    public void removerProducto(Producto producto){
+    public void eliminarProducto(Producto producto){
         listaProductos.remove(producto);
     }
     
@@ -67,10 +67,9 @@ public class Supermercado_DeTodo {
         return listaRubro;
     }
     
-     public void actualizar(int codigo, String descripcion, int precio, String rubro, int stock){
-        Producto producto= new Producto(codigo, descripcion, precio, rubro, stock);
+     public void actualizar(Producto producto){        
         for (Producto listaProducto : listaProductos) {
-            if (codigo==listaProducto.getCodigo()) {
+            if (producto.getCodigo()==listaProducto.getCodigo()) {
                 listaProductos.remove(listaProducto);
                 break;
             }
