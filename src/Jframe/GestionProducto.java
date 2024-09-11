@@ -132,6 +132,12 @@ public class GestionProducto extends javax.swing.JInternalFrame {
                 .addContainerGap(47, Short.MAX_VALUE))
         );
 
+        jButtonBusqueda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBusquedaActionPerformed(evt);
+            }
+        });
+
         jButtonCerrar.setText("Cerrar");
 
         jButtonNuevo.setText("Nuevo");
@@ -215,6 +221,15 @@ public class GestionProducto extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButtonBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBusquedaActionPerformed
+        Supermercado_DeTodo mercado = new Supermercado_DeTodo();
+        Producto producto=mercado.buscarXcodigo(Integer.parseInt(jTextFieldCodigo.getText()));
+        jTextFieldDescripcion.setText(producto.getDescripcion());
+        jTextFieldPrecio.setText(String.valueOf(producto.getPrecio()));
+        jComboCategoria.setSelectedItem(producto.getRubro());
+        jSpinnerStock.setValue(producto.getStock());
+    }//GEN-LAST:event_jButtonBusquedaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

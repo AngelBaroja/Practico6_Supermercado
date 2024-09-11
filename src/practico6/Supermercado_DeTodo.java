@@ -75,8 +75,7 @@ public class Supermercado_DeTodo {
                 break;
             }
         }
-        listaProductos.add(producto);
-        
+        listaProductos.add(producto);        
     }
     
 }
