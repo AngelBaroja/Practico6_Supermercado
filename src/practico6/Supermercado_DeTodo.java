@@ -24,7 +24,7 @@ public class Supermercado_DeTodo {
         listaProductos.remove(producto);
     }
     
-    public Producto buscarXcodigo(int codigo){
+    public static Producto buscarXcodigo(int codigo){
         Producto producto=null;
         for (Producto listaProducto : listaProductos) {
             if (codigo==listaProducto.getCodigo()) {
@@ -35,7 +35,7 @@ public class Supermercado_DeTodo {
         return producto;
     }
     
-    public TreeSet<Producto> buscarXprecio(int minimo, int maximo){
+    public static TreeSet<Producto> buscarXprecio(int minimo, int maximo){
         TreeSet<Producto> listaPrecio=new TreeSet();
         for (Producto listaProducto : listaProductos) {
             if (listaProducto.getPrecio()<=maximo && listaProducto.getPrecio()>=minimo) {
@@ -45,19 +45,19 @@ public class Supermercado_DeTodo {
         return listaPrecio;
     }
     
-     public TreeSet<Producto> buscarXnombre(String descripcion){
+     public static TreeSet<Producto> buscarXnombre(String descripcion){
         TreeSet<Producto> listaNombre=new TreeSet();
         descripcion=descripcion.toLowerCase();
         for (Producto listaProducto : listaProductos) {
             String descripcionProducto=listaProducto.getDescripcion().toLowerCase();
-            if (descripcion.startsWith(descripcion)) {
+            if (descripcionProducto.contains(descripcion)) {
                 listaNombre.add(listaProducto);
             }
         }
         return listaNombre;
     }
      
-    public TreeSet<Producto> buscarXrubro(String rubro){
+    public static TreeSet<Producto> buscarXrubro(String rubro){
         TreeSet<Producto>listaRubro=new TreeSet();
         for (Producto listaProducto : listaProductos) {
             if (listaProducto.getRubro().equalsIgnoreCase(rubro)) {

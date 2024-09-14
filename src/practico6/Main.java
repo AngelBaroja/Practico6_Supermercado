@@ -5,6 +5,7 @@
 package practico6;
 
 import Jframe.PantallaPrincipal;
+import java.util.TreeSet;
 
 /**
  *
@@ -23,10 +24,8 @@ public class Main {
         Supermercado_DeTodo.listaProductos.add(p1);
         Supermercado_DeTodo.listaProductos.add(p2);
         Supermercado_DeTodo.listaProductos.add(p3);
-        
         PantallaPrincipal pp=new PantallaPrincipal();
-      
-        pp.repaint();
+              pp.repaint();
         
         pp.setVisible(true);
         

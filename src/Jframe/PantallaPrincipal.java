@@ -4,6 +4,11 @@
  */
 package Jframe;
 
+import java.awt.Graphics;
+import java.awt.Image;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author El Angel
@@ -27,7 +32,14 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         jMenu1 = new javax.swing.JMenu();
-        escritorio = new javax.swing.JDesktopPane();
+        ImageIcon icon = new ImageIcon(getClass().getResource("/imagenes/fondo.jpg"));
+        Image image = icon.getImage();
+        escritorio = new javax.swing.JDesktopPane(){
+
+            public void paintComponent(Graphics g){
+                g.drawImage(image,0,0,getWidth(),getHeight(),this);
+            }
+        };
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
@@ -47,7 +59,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         );
         escritorioLayout.setVerticalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 735, Short.MAX_VALUE)
+            .addGap(0, 670, Short.MAX_VALUE)
         );
 
         jMenu2.setText("Administracion");
@@ -61,12 +73,27 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jMenu3.setText("Consultas");
 
         jMenuItem2.setText("Por Nombre");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem2);
 
         jMenuItem3.setText("Por Precio");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem3);
 
         jMenuItem4.setText("Por Rubro");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem4);
 
         jMenuBar1.add(jMenu3);
@@ -81,10 +108,13 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(escritorio, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(escritorio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
@@ -95,6 +125,51 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         escritorio.add(gestionProducto);
         escritorio.moveToFront(gestionProducto);
     }//GEN-LAST:event_jMenu2MouseClicked
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        escritorio.removeAll();
+        escritorio.repaint();
+        Buscarprecio buscarpre = new Buscarprecio();
+        buscarpre.setVisible(true);
+        escritorio.add(buscarpre);
+        escritorio.moveToFront(buscarpre);
+        try {
+            buscarpre.setSelected(true);
+        } catch (java.beans.PropertyVetoException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al abrir la ventana de búsqueda por precio.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        escritorio.removeAll();
+        escritorio.repaint();
+        Buscarnombre buscarnom= new Buscarnombre();
+        buscarnom.setVisible(true);
+        escritorio.add(buscarnom);
+        escritorio.moveToFront(buscarnom);
+        try {
+            buscarnom.setSelected(true);
+        } catch (java.beans.PropertyVetoException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al abrir la ventana de búsqueda por nombre.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        escritorio.removeAll();
+        escritorio.repaint();
+        Buscarrubro buscarrub= new Buscarrubro();
+        buscarrub.setVisible(true);
+        escritorio.add(buscarrub);
+        escritorio.moveToFront(buscarrub);
+        try {
+            buscarrub.setSelected(true);
+        } catch (java.beans.PropertyVetoException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al abrir la ventana de búsqueda por nombre.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     /**
      * @param args the command line arguments
